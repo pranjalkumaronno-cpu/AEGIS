@@ -1,0 +1,383 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #07111f;
+    color: #e8f1ff;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+.topbar {
+    height: 82px;
+    padding: 0 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0b192a;
+    border-bottom: 1px solid #19324c;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 43px;
+    height: 43px;
+    background: #00bcd4;
+    color: #06111e;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 12px;
+}
+
+.brand h1 {
+    font-size: 21px;
+    letter-spacing: 3px;
+}
+
+.brand p,
+.eyebrow,
+.card-label {
+    color: #7896b5;
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    margin-top: 5px;
+}
+
+.system-status {
+    color: #54d6a0;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.status-dot {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    background: #54d6a0;
+    box-shadow: 0 0 12px #54d6a0;
+}
+
+.dashboard {
+    width: 90%;
+    max-width: 1450px;
+    margin: 35px auto;
+}
+
+.welcome {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 27px;
+}
+
+.welcome h2 {
+    font-size: 31px;
+    margin-top: 9px;
+}
+
+.subtitle {
+    color: #8198b2;
+    font-size: 13px;
+    margin-top: 9px;
+}
+
+.search-box {
+    display: flex;
+    gap: 9px;
+    background: #101f32;
+    padding: 7px;
+    border: 1px solid #25415d;
+    border-radius: 10px;
+}
+
+.search-box input {
+    width: 190px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 10px;
+}
+
+.search-box button {
+    background: #00bcd4;
+    color: #06111e;
+    border: none;
+    padding: 0 19px;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.search-box button:hover {
+    background: #58e4f3;
+}
+
+.weather-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 19px;
+}
+
+.panel {
+    background: #0d1b2c;
+    border: 1px solid #1b344e;
+    border-radius: 13px;
+    padding: 22px;
+}
+
+.weather-card h2 {
+    font-size: 30px;
+    margin: 16px 0 8px;
+}
+
+.weather-card p:last-child {
+    color: #8098b3;
+    font-size: 12px;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr;
+    gap: 17px;
+    margin-bottom: 18px;
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.panel h3 {
+    font-size: 17px;
+    margin-top: 8px;
+}
+
+.live-label {
+    color: #48d9b0;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+#map {
+    height: 390px;
+    width: 100%;
+    border-radius: 9px;
+    overflow: hidden;
+    background: #102238;
+}
+
+.map-caption {
+    color: #8098b3;
+    font-size: 11px;
+    margin-top: 12px;
+}
+
+.risk-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.risk-panel > h3 {
+    align-self: flex-start;
+}
+
+.risk-circle {
+    width: 190px;
+    height: 190px;
+    border: 7px solid #28445d;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 35px 0 23px;
+    background: #10243a;
+    box-shadow: 0 0 35px #07111f;
+}
+
+.risk-circle span {
+    font-size: 29px;
+    font-weight: bold;
+}
+
+.risk-circle small {
+    font-size: 9px;
+    color: #91a9c3;
+    margin-top: 7px;
+    letter-spacing: 1px;
+}
+
+.risk-score {
+    color: #8ca4bd;
+    font-size: 13px;
+}
+
+.risk-score strong {
+    color: white;
+    font-size: 19px;
+    margin-left: 8px;
+}
+
+.risk-note {
+    color: #8198b2;
+    font-size: 11px;
+    text-align: center;
+    margin-top: 19px;
+    line-height: 1.6;
+}
+
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 17px;
+}
+
+.hazard-list,
+.recommendations {
+    margin-top: 18px;
+}
+
+.hazard-item,
+.recommendation-item {
+    background: #12243a;
+    border: 1px solid #1e3b56;
+    border-radius: 8px;
+    padding: 13px;
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.hazard-item strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.hazard-item span {
+    color: #8ca6c0;
+}
+
+.recommendation-item {
+    color: #b8cee4;
+}
+
+.empty-state {
+    color: #7189a4;
+    font-size: 12px;
+    margin-top: 15px;
+}
+
+.disclaimer {
+    text-align: center;
+    color: #647d97;
+    font-size: 10px;
+    margin: 25px 0;
+    line-height: 1.6;
+}
+
+@media (max-width: 850px) {
+    .welcome {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .weather-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .main-grid,
+    .bottom-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #map {
+        height: 320px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard {
+        width: 94%;
+    }
+
+    .topbar {
+        padding: 0 3%;
+    }
+
+    .system-status {
+        font-size: 9px;
+    }
+
+    .search-box {
+        width: 100%;
+    }
+
+    .search-box input {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .weather-card {
+        padding: 15px;
+    }
+}
+
+.forecast-panel {
+    margin-bottom: 18px;
+}
+
+.forecast-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.forecast-day {
+    background: #12243a;
+    border: 1px solid #1e3b56;
+    border-radius: 10px;
+    padding: 16px 10px;
+    text-align: center;
+}
+
+.forecast-day h4 {
+    font-size: 12px;
+    color: #a8bfd7;
+}
+
+.forecast-day .forecast-temp {
+    font-size: 21px;
+    margin: 13px 0;
+}
+
+.forecast-day p {
+    color: #8ca6c0;
+    font-size: 11px;
+    margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+    .forecast-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

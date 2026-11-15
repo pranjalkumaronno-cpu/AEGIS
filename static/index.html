@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEGIS | Command Center</title>
+<link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">A</div>
+            <div>
+                <h1>AEGIS</h1>
+                <p>GLOBAL CRISIS INTELLIGENCE</p>
+            </div>
+        </div>
+        <div class="system-status">
+            <span class="status-dot"></span>
+            SYSTEM OPERATIONAL
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">INTELLIGENCE OVERVIEW</p>
+                <h2>Command Center</h2>
+                <p class="subtitle">Monitor weather conditions and identify potential environmental risks.</p>
+            </div>
+            <div class="search-box">
+                <input id="cityInput" type="text" placeholder="Search a city...">
+                <button id="searchButton">ANALYZE</button>
+            </div>
+        </section>
+
+        <section class="weather-grid">
+            <div class="panel weather-card">
+                <p class="card-label">TEMPERATURE</p>
+                <h2 id="temperature">--°C</h2>
+                <p id="condition">Waiting for location</p>
+            </div>
+            <div class="panel weather-card">
+                <p class="card-label">HUMIDITY</p>
+                <h2 id="humidity">--%</h2>
+                <p>Relative humidity</p>
+            </div>
+            <div class="panel weather-card">
+                <p class="card-label">WIND SPEED</p>
+                <h2 id="wind">--</h2>
+                <p>km/h</p>
+            </div>
+            <div class="panel weather-card">
+                <p class="card-label">PRECIPITATION</p>
+                <h2 id="precipitation">--</h2>
+                <p>mm</p>
+            </div>
+        </section>
+
+        <section class="main-grid">
+            <div class="panel map-panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="card-label">GEOSPATIAL MONITORING</p>
+                        <h3>Global Weather Map</h3>
+                    </div>
+                    <span class="live-label">LIVE LOCATION</span>
+                </div>
+                <div id="map"></div>
+                <p class="map-caption" id="mapCaption">Search a city to locate it on the map.</p>
+            </div>
+
+            <div class="panel risk-panel">
+                <p class="card-label">AEGIS RISK ENGINE</p>
+                <h3>Risk Assessment</h3>
+                <div class="risk-circle" id="riskCircle">
+                    <span id="riskLevel">--</span>
+                    <small>OVERALL RISK</small>
+                </div>
+                <div class="risk-score">
+                    Risk score <strong id="riskScore">--</strong>
+                </div>
+                <p class="risk-note" id="riskNote">Search a city to begin analysis.</p>
+            </div>
+        </section>
+
+
+<section class="panel forecast-panel">
+    <div class="panel-heading">
+        <div>
+            <p class="card-label">PREDICTIVE WEATHER INTELLIGENCE</p>
+            <h3>5-Day Weather Forecast</h3>
+        </div>
+        <span class="live-label">OPEN-METEO</span>
+    </div>
+    <div id="forecastGrid" class="forecast-grid">
+        <p class="empty-state">Search a city to load its forecast.</p>
+    </div>
+</section>
+
+
+        <section class="bottom-grid">
+            <div class="panel">
+                <p class="card-label">HAZARD INTELLIGENCE</p>
+                <h3>Identified Risks</h3>
+                <div id="hazardList" class="hazard-list">
+                    <p class="empty-state">No analysis available yet.</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <p class="card-label">COMMUNITY PREPAREDNESS</p>
+                <h3>Safety Recommendations</h3>
+                <div id="recommendations" class="recommendations">
+                    <p class="empty-state">Recommendations will appear after analysis.</p>
+                </div>
+            </div>
+        </section>
+
+        <p class="disclaimer">
+            AEGIS provides experimental weather screening, not official disaster warnings or predictions.
+            Follow local authorities and official emergency guidance.
+        </p>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>

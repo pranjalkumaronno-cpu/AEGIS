@@ -1,4 +1,6 @@
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from fastapi import FastAPI, HTTPException
 import requests
 
@@ -10,22 +12,17 @@ app = FastAPI(
     description="Global Weather and Crisis Intelligence",
     version="1.1"
 )
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 WEATHER_URL = "https://api.open-meteo.com/v1/forecast"
 
 
-# HOME
 @app.get("/")
 def home():
-    return {
-        "project": "AEGIS",
-        "message": "Backend is running!",
-        "status": "ONLINE"
-    }
+    return FileResponse("static/index.html")
 
 
-# HEALTH
 @app.get("/health")
 def health():
     return {
@@ -34,7 +31,7 @@ def health():
     }
 
 
-# ABOUT
+
 @app.get("/about")
 def about():
     return {
@@ -45,7 +42,6 @@ def about():
     }
 
 
-# WEATHER CONDITION TRANSLATOR
 def describe_weather(code):
 
     conditions = {
@@ -75,7 +71,7 @@ def describe_weather(code):
     return conditions.get(code, "Unknown weather condition")
 
 
-# WEATHER ENDPOINT
+
 @app.get("/weather/{city}")
 def get_weather(city: str, units: str = "celsius"):
 
@@ -127,7 +123,7 @@ def get_weather(city: str, units: str = "celsius"):
         latitude = location["latitude"]
         longitude = location["longitude"]
 
-        # STEP 2: Fetch current weather
+       
 
         temperature_unit = (
             "fahrenheit" if units == "fahrenheit" else "celsius"
@@ -161,7 +157,7 @@ def get_weather(city: str, units: str = "celsius"):
 
         temperature = current["temperature_2m"]
 
-        # STEP 3: Convert to Kelvin if requested
+        
 
         if units == "kelvin":
             temperature = round(temperature + 273.15, 2)
@@ -211,7 +207,7 @@ def get_weather(city: str, units: str = "celsius"):
         )
 
 
-# RISK ENDPOINT
+
 @app.get("/risk/{city}")
 def get_risk(city: str):
 
@@ -224,8 +220,7 @@ def get_risk(city: str):
         )
 
     try:
-        # STEP 1: Find city coordinates
-
+      
         location_response = requests.get(
             GEOCODING_URL,
             params={
@@ -252,7 +247,6 @@ def get_risk(city: str):
         latitude = location["latitude"]
         longitude = location["longitude"]
 
-        # STEP 2: Fetch weather in Celsius
 
         weather_response = requests.get(
             WEATHER_URL,
@@ -277,11 +271,10 @@ def get_risk(city: str):
 
         current = weather_response.json()["current"]
 
-        # STEP 3: Run AEGIS Risk Engine
 
         risk_result = analyze_weather(current)
 
-        # STEP 4: Return intelligence report
+        
 
         return {
             "project": "AEGIS",
@@ -319,7 +312,93 @@ def get_risk(city: str):
         )
 
 
-# GREET
+@app.get("/forecast/{city}")
+def get_forecast(city: str):
+    city = city.strip()
+
+    if not city or city.isdigit():
+        raise HTTPException(status_code=400, detail="Please enter a valid city name.")
+
+    try:
+        location_response = requests.get(
+            GEOCODING_URL,
+            params={
+                "name": city,
+                "count": 1,
+                "language": "en",
+                "format": "json"
+            },
+            timeout=10
+        )
+        location_response.raise_for_status()
+
+        results = location_response.json().get("results", [])
+
+        if not results:
+            raise HTTPException(status_code=404, detail="City not found.")
+
+        location = results[0]
+
+        forecast_response = requests.get(
+            WEATHER_URL,
+            params={
+                "latitude": location["latitude"],
+                "longitude": location["longitude"],
+                "hourly": (
+                    "temperature_2m,"
+                    "precipitation_probability,"
+                    "precipitation,"
+                    "wind_speed_10m,"
+                    "weather_code"
+                ),
+                "daily": (
+                    "weather_code,"
+                    "temperature_2m_max,"
+                    "temperature_2m_min,"
+                    "precipitation_sum,"
+                    "precipitation_probability_max,"
+                    "wind_speed_10m_max"
+                ),
+                "forecast_days": 5,
+                "temperature_unit": "celsius",
+                "wind_speed_unit": "kmh",
+                "timezone": "auto"
+            },
+            timeout=10
+        )
+        forecast_response.raise_for_status()
+
+        forecast_data = forecast_response.json()
+
+        return {
+            "project": "AEGIS",
+            "location": {
+                "city": location["name"],
+                "country": location.get("country"),
+                "latitude": location["latitude"],
+                "longitude": location["longitude"]
+            },
+            "timezone": forecast_data.get("timezone"),
+            "hourly_forecast": forecast_data.get("hourly", {}),
+            "daily_forecast": forecast_data.get("daily", {}),
+            "data_source": "Open-Meteo",
+            "status": "SUCCESS"
+        }
+
+    except HTTPException:
+        raise
+    except requests.RequestException:
+        raise HTTPException(
+            status_code=503,
+            detail="Forecast service is currently unavailable."
+        )
+    except (KeyError, ValueError, TypeError):
+        raise HTTPException(
+            status_code=502,
+            detail="Unexpected forecast data received."
+        )
+
+
 @app.get("/greet/{name}")
 def greet(name: str, language: str = "English"):
 

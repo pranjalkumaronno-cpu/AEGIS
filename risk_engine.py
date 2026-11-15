@@ -1,141 +1,148 @@
 
-# AEGIS - Risk Intelligence Engine
-# Version 1.0
+def analyze_weather(weather_data):
 
-def analyze_weather(weather):
+    required_fields = [
+        "temperature_2m",
+        "wind_speed_10m",
+        "precipitation",
+        "weather_code"
+    ]
 
-    temperature = weather["temperature_2m"]
-    wind_speed = weather["wind_speed_10m"]
-    precipitation = weather["precipitation"]
-    weather_code = weather["weather_code"]
+    for field in required_fields:
+        if field not in weather_data or weather_data[field] is None:
+            raise ValueError(f"Missing weather data: {field}")
 
-    risks = []
+    temperature = float(weather_data["temperature_2m"])
+    wind_speed = float(weather_data["wind_speed_10m"])
+    precipitation = float(weather_data["precipitation"])
+    weather_code = int(weather_data["weather_code"])
 
-    # 1. Temperature analysis
+    if temperature < -100 or temperature > 70:
+        raise ValueError("Invalid temperature value.")
+
+    if wind_speed < 0 or wind_speed > 500:
+        raise ValueError("Invalid wind speed.")
+
+    if precipitation < 0:
+        raise ValueError("Invalid precipitation value.")
+
+    identified_risks = []
 
     if temperature >= 45:
-        risks.append({
+        identified_risks.append({
             "type": "Extreme Heat",
             "level": "CRITICAL",
             "score": 3,
-            "recommendation": "Avoid prolonged outdoor activity and follow local heat advisories."
+            "observed_value": temperature,
+            "unit": "°C",
+            "recommendation": "Avoid prolonged outdoor activity and follow official heat advisories."
         })
 
     elif temperature >= 40:
-        risks.append({
+        identified_risks.append({
             "type": "High Temperature",
             "level": "HIGH",
             "score": 2,
+            "observed_value": temperature,
+            "unit": "°C",
             "recommendation": "Stay hydrated and reduce strenuous outdoor activity."
         })
 
     elif temperature >= 35:
-        risks.append({
+        identified_risks.append({
             "type": "Heat Stress",
             "level": "MODERATE",
             "score": 1,
+            "observed_value": temperature,
+            "unit": "°C",
             "recommendation": "Stay hydrated and take breaks in shaded areas."
         })
 
-    # 2. Wind analysis
-
     if wind_speed >= 62:
-        risks.append({
+        identified_risks.append({
             "type": "Extreme Wind",
             "level": "CRITICAL",
             "score": 3,
-            "recommendation": "Seek shelter and follow official severe-weather guidance."
+            "observed_value": wind_speed,
+            "unit": "km/h",
+            "recommendation": "Seek appropriate shelter and follow official severe-weather guidance."
         })
 
-    elif wind_speed >= 39 and wind_speed < 62:
-        risks.append({
+    elif wind_speed >= 39:
+        identified_risks.append({
             "type": "Strong Wind",
             "level": "HIGH",
             "score": 2,
+            "observed_value": wind_speed,
+            "unit": "km/h",
             "recommendation": "Secure loose outdoor objects and avoid exposed areas."
         })
 
-    elif wind_speed >= 20 and wind_speed < 39:
-        risks.append({
+    elif wind_speed >= 20:
+        identified_risks.append({
             "type": "Elevated Wind",
             "level": "MODERATE",
             "score": 1,
+            "observed_value": wind_speed,
+            "unit": "km/h",
             "recommendation": "Exercise caution around trees and unsecured objects."
         })
 
-    elif wind_speed >= 2 and wind_speed < 20:    
-        risks.append({
-            "type": "Light Wind",
-            "level": "LOW",
-            "score": 0,
-            "recommendation": "Normal outdoor activities can proceed with caution."
-        })
-        
-    elif wind_speed < 2:
-        risks.append({
-            "type": "Calm Wind",
-            "level": "LOW",
-            "score": 0,
-            "recommendation": "Normal outdoor activities can proceed."
-        })     
-
-    # 3. Precipitation analysis
-
     if precipitation >= 15:
-        risks.append({
+        identified_risks.append({
             "type": "Heavy Current Precipitation",
             "level": "HIGH",
             "score": 2,
+            "observed_value": precipitation,
+            "unit": "mm",
             "recommendation": "Monitor official rainfall and flood advisories."
         })
 
     elif precipitation >= 7:
-        risks.append({
+        identified_risks.append({
             "type": "Elevated Current Precipitation",
             "level": "MODERATE",
             "score": 1,
+            "observed_value": precipitation,
+            "unit": "mm",
             "recommendation": "Monitor local rainfall conditions."
         })
 
-    # 4. Thunderstorm detection
-
     if weather_code in [95, 96, 99]:
-        risks.append({
+        identified_risks.append({
             "type": "Thunderstorm",
             "level": "HIGH",
             "score": 2,
+            "observed_value": weather_code,
+            "unit": "weather code",
             "recommendation": "Move indoors and follow official weather alerts."
         })
 
-    # 5. Calculate overall indicator
-
-    if not risks:
-        overall_level = "LOW"
+    if identified_risks:
+        overall_score = max(
+            risk["score"] for risk in identified_risks
+        )
+    else:
         overall_score = 0
 
-    else:
-        overall_score = max(risk["score"] for risk in risks)
-
-        levels = {
-            0: "LOW",
-            1: "MODERATE",
-            2: "HIGH",
-            3: "CRITICAL"
-        }
-
-        overall_level = levels[overall_score]
+    risk_levels = {
+        0: "LOW",
+        1: "MODERATE",
+        2: "HIGH",
+        3: "CRITICAL"
+    }
 
     return {
         "engine": "AEGIS Risk Engine",
-        "version": "1.0",
-        "overall_level": overall_level,
+        "version": "2.0",
+        "overall_level": risk_levels[overall_score],
         "risk_score": overall_score,
-        "identified_risks": risks,
-        "risk_count": len(risks),
+        "identified_risks": identified_risks,
+        "risk_count": len(identified_risks),
         "assessment_type": "Rule-based weather screening",
+        "scoring_method": "Highest individual risk score",
         "warning": (
-            "This is an experimental weather indicator, "
-            "not an official disaster warning or flood prediction."
+            "This is an experimental weather screening indicator, "
+            "not an official disaster warning or disaster prediction."
         )
     }
-
