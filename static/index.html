@@ -72,6 +72,49 @@
                 <p class="map-caption" id="mapCaption">Search a city to locate it on the map.</p>
             </div>
 
+            <section class="panel custom-analysis">
+    <div class="panel-heading">
+        <div>
+            <p class="card-label">ADVANCED ANALYSIS</p>
+            <h3>Custom Location Risk Analysis</h3>
+        </div>
+        <span class="live-label">MANUAL MODE</span>
+    </div>
+
+    <p class="custom-description">
+        Select a location on the map and enter its temperature
+        to calculate a heat-risk indicator.
+    </p>
+
+    <div id="selectedLocation" class="selected-location">
+        <span>LOCATION:</span>
+        No location selected
+    </div>
+
+    <div class="manual-calculator">
+        <input
+            type="number"
+            id="manualTemperature"
+            placeholder="Temperature in °C"
+            min="-50"
+            max="60"
+            step="0.1"
+        >
+
+        <button id="calculateManualRisk">
+            CALCULATE RISK
+        </button>
+    </div>
+
+    <div id="manualRiskResult" class="manual-result">
+        Awaiting location and temperature input.
+    </div>
+
+    <p class="custom-disclaimer">
+        Experimental temperature-only screening.
+        Not an official weather warning.
+    </p>
+</section> 
             <div class="panel risk-panel">
                 <p class="card-label">AEGIS RISK ENGINE</p>
                 <h3>Risk Assessment</h3>

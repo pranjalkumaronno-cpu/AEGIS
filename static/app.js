@@ -80,7 +80,89 @@ loadRadarLayer();
 
 
 let cityMarker = null;
+let selectedPinMarker = null;
+let selectedCoordinates = null;
 
+map.on("click", event => {
+    const latitude = event.latlng.lat;
+    const longitude = event.latlng.lng;
+
+    selectedCoordinates = {
+        latitude: latitude,
+        longitude: longitude
+    };
+
+    if (selectedPinMarker) {
+        map.removeLayer(selectedPinMarker);
+    }
+
+    selectedPinMarker = L.marker([latitude, longitude])
+        .addTo(map)
+        .bindPopup("Custom Analysis Location")
+        .openPopup();
+
+    displayText(
+        "selectedLocation",
+        "LOCATION: " +
+        latitude.toFixed(4) + ", " +
+        longitude.toFixed(4)
+    );
+});
+
+document.getElementById("calculateManualRisk")
+    .addEventListener("click", () => {
+
+        const temperatureInput =
+            document.getElementById("manualTemperature");
+
+        const result =
+            document.getElementById("manualRiskResult");
+
+        if (!selectedCoordinates) {
+            result.textContent =
+                "Please select a location on the map first.";
+            return;
+        }
+
+        if (
+            temperatureInput.value.trim() === "" ||
+            !Number.isFinite(Number(temperatureInput.value)) ||
+            Number(temperatureInput.value) < -50 ||
+            Number(temperatureInput.value) > 60
+        ) {
+            result.textContent =
+                "Enter a valid temperature between -50°C and 60°C.";
+            return;
+        }
+
+        const temperature = Number(temperatureInput.value);
+
+        let level;
+        let recommendation;
+
+        if (temperature >= 45) {
+            level = "CRITICAL";
+            recommendation =
+                "Extreme heat indicator. Seek a cool environment and follow official heat advisories.";
+        } else if (temperature >= 40) {
+            level = "HIGH";
+            recommendation =
+                "High heat indicator. Reduce outdoor exposure and stay hydrated.";
+        } else if (temperature >= 35) {
+            level = "MODERATE";
+            recommendation =
+                "Elevated heat indicator. Take precautions during outdoor activities.";
+        } else {
+            level = "LOW";
+            recommendation =
+                "No elevated heat threshold detected by this screening.";
+        }
+
+        result.textContent =
+            "Temperature: " + temperature + "°C | " +
+            "Heat Risk: " + level + ". " +
+            recommendation;
+    });
 function displayText(elementId, value) {
     document.getElementById(elementId).textContent = value;
 }
